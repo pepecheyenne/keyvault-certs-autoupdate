@@ -57,6 +57,18 @@ cp  "$WORKDIR/SSL_CERTIFICATE.cer" "$DESTDIR/tls.pem"
 cat "$WORKDIR/PRIVATE.key" >> "$DESTDIR/tls.pem"
 
 echo "[INFO] Reiniciando el servicio pihole-FTL..."
+service pihole-FTL restartecho "[INFO] Reiniciando el servicio pihole-FTL..."
 service pihole-FTL restart
 
+echo "[INFO] Actualizando certificado en Portainer..."
+cp "$WORKDIR/SSL_CERTIFICATE.cer" /etc/ssl/
+cp "$WORKDIR/PRIVATE.key" /etc/ssl/
+chmod 604 /etc/ssl/SSL_CERTIFICATE.cer
+chmod 604 /etc/ssl/PRIVATE.key
+docker restart portainer
+docker restart homeassistant
+docker restart tailscaled
+
 echo "[INFO] Certificado actualizado correctamente"
+echo "===================================================================="
+echo "===================================================================="
